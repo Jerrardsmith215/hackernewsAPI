@@ -5,6 +5,7 @@ function Story(props) {
   return (
     <>
       <Paper sx={{p: 2}} elevation={6}>
+        Hello {props.id}
       </Paper>
     </>
   )
