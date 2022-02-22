@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { onValue } from "firebase/database";
-import { newStoriesRef } from '../../api/references';
+import { child, get, onValue } from "firebase/database";
+import { itemRef, newStoriesRef } from '../../api/references';
 import Story from './Story';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
@@ -8,19 +8,26 @@ import Grid from '@mui/material/Grid';
 
 function StoriesList() {
   const [newestStories, setNewestStories] = useState([]);
-  const [storyObjs, setStoryObjs] = useState([]);
 
   useEffect(() => {
-    onValue(newStoriesRef, snap => {
+    onValue(newStoriesRef, async snap => {
+      const temp = []
       if (snap.exists()) {
-        setNewestStories(snap.val());
-      } else setNewestStories([]);
+        const storyIds = snap.val();
+        for(let i = 0, n = storyIds.length; i < n; i++) {
+          const id = storyIds[i];
+          const story = await get(child(itemRef, `${id}`))
+          .then(res => res.val())
+          .catch(e => console.log(e));
+          temp.push(story);
+        }
+        console.log(temp)
+        setNewestStories(temp);
+      }
+      else setNewestStories([]);
     });
 
-    return () => {
-      setNewestStories([]);
-    };
-  }, [newStoriesRef]);
+  }, []);
 
   return (
     <>
@@ -29,7 +36,7 @@ function StoriesList() {
         <Box sx={{ flexGrow: 1 }}>
           <Grid container spacing={2}>
             {newestStories.map(story =>
-              <Grid key={story} item xs={12}><Story id={story} /></Grid>)
+              <Grid key={story.id} item xs={12}><Story details={story} /></Grid>)
             }
           </Grid>
         </Box>

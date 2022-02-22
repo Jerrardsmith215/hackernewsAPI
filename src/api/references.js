@@ -1,6 +1,6 @@
 import db from './firebaseConfig';
-import { ref } from "firebase/database";
+import { limitToFirst, ref, query } from "firebase/database";
 
 // references
-export const newStoriesRef = ref(db, '/v0/newstories');
+export const newStoriesRef = query(ref(db, '/v0/newstories'), limitToFirst(100));
 export const itemRef = ref(db, `/v0/item`);
