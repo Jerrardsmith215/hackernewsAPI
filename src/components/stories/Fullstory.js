@@ -13,9 +13,11 @@ function Fullstory() {
   const storyId = state.storyId;
   const title = state.title;
   const author = state.author;
-  const written = state.written;
+  const time = new Date(state.written * 1000);
+  const written = Number(state.written) ?`${time.getMonth()} ${time.getDate()} ${time.getFullYear()}` : 'unavailable';
   const text = state.text;
   const link = state.link;
+  const score = state.score;
 
   return (
     <>
@@ -31,6 +33,7 @@ function Fullstory() {
           <Typography variant="body2">Story ID: {storyId}</Typography>
           <Typography variant="body2">Written by: {author}</Typography>
           <Typography variant="body2">On: {written}</Typography>
+          <Typography variant="body2">{score} Points</Typography>
           <Divider sx={{ marginY: 1 }} />
           <Typography variant="h5" component="h2">Summary</Typography>
           <Typography>{text}</Typography>
