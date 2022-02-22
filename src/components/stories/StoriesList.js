@@ -6,6 +6,7 @@ import Loader from '../loader/Loader';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 
 function StoriesList() {
@@ -55,9 +56,13 @@ function StoriesList() {
         <Box sx={{ flexGrow: 1 }}>
           <Grid container spacing={2}>
             {newestStories.map((story, index) =>
-              typeof story === 'object' ? (<Grid key={index} item xs={12} md={6}><Story details={story ? story : ({})} /></Grid>)
+              typeof story === 'object' && story !== null ? (<Grid key={index} item xs={12} md={6}><Story details={story ? story : ({})} /></Grid>)
                 :
-                <Typography variant="body2">Error Rendering This Card...</Typography>
+                <Grid key={index} item xs={12} md={6}>
+                  <Paper sx={{ p: 2 }} elevation={6}>
+                    <Typography variant="h5" component="h2">Error Rendering This Card...</Typography>
+                  </Paper>
+                </Grid>
             )}
           </Grid>
         </Box>

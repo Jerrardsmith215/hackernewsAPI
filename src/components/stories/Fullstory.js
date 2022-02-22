@@ -1,9 +1,11 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link as RouterLink } from 'react-router-dom';
 import Paper from '@mui/material/Paper';
 import Link from '@mui/material/Link';
 import Divider from '@mui/material/Divider';
 import Container from '@mui/material/Container';
+import IconButton from '@mui/material/IconButton';
+import ArrowBack from '@mui/icons-material/ArrowBack';
 import Typography from '@mui/material/Typography';
 
 function Fullstory() {
@@ -19,6 +21,12 @@ function Fullstory() {
     <>
       <Container>
         <Paper sx={{ p: 2 }} elevation={6}>
+          <RouterLink to="/">
+            <IconButton>
+              <ArrowBack />
+              <Typography variant="body2" sx={{ marginTop: .21 }} >Back to All</Typography>
+            </IconButton>
+          </RouterLink>
           <Typography variant="h4" component="h1">{title}</Typography>
           <Typography variant="body2">Story ID: {storyId}</Typography>
           <Typography variant="body2">Written by: {author}</Typography>
