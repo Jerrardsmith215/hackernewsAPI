@@ -16,7 +16,7 @@ function StoriesList() {
     setIsLoading(true);
     const temp = [];
 
-    (async () => onValue(newStoriesRef, async snap => {
+    onValue(newStoriesRef, async snap => {
       if (snap.exists()) {
         const storyIds = snap.val();
 
@@ -34,11 +34,13 @@ function StoriesList() {
       };
 
       setIsLoading(false);
-    }
-    )
-    )()
+    })
 
-  }, [newStoriesRef]);
+    return () => {
+      console.log('unmounting...')
+    }
+
+  }, []);
 
   if (isLoading) {
     return (<>
