@@ -12,48 +12,56 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 
 function sortByAuthor(a, b) {
-  const nameA = a.by.toUpperCase();
-  const nameB = b.by.toUpperCase();
+  if (typeof (a && b) === 'object') {
 
-  if (nameA < nameB) {
-    return -1
+    const nameA = a.by.toUpperCase();
+    const nameB = b.by.toUpperCase();
+
+    if (nameA < nameB) {
+      return -1
+    }
+
+    if (nameA > nameB) {
+      return 1
+    }
+
+    return 0;
   }
-
-  if (nameA > nameB) {
-    return 1
-  }
-
-  return 0;
 }
 
 function sortByTime(a, b) {
-  const timeA = a.time;
-  const timeB = b.time;
+  if (typeof (a && b) === 'object') {
+    const timeA = a.time;
+    const timeB = b.time;
 
-  if (timeA < timeB) {
-    return -1
+    if (timeA < timeB) {
+      return -1
+    }
+
+    if (timeA > timeB) {
+      return 1
+    }
+
+    return 0;
   }
-
-  if (timeA > timeB) {
-    return 1
-  }
-
-  return 0;
 }
 
 function sortByScore(a, b) {
-  const scoreA = a.score;
-  const scoreB = b.score;
+  if (typeof (a && b) === 'object') {
 
-  if (scoreA < scoreB) {
-    return -1
+    const scoreA = a.score;
+    const scoreB = b.score;
+
+    if (scoreA < scoreB) {
+      return -1
+    }
+
+    if (scoreA > scoreB) {
+      return 1
+    }
+
+    return 0;
   }
-
-  if (scoreA > scoreB) {
-    return 1
-  }
-
-  return 0;
 }
 
 function StoriesList() {
@@ -62,20 +70,23 @@ function StoriesList() {
   const [isLoading, setIsLoading] = useState();
 
   function handleSortChange(sorter) {
-  if(sorter === 1) {
-    const sorted = newestStories.sort(sortByAuthor);
-    setNewestStories(sorted);
-  }
+    if (sorter === 1) {
+      setSortFilter(1)
+      const sorted = newestStories.sort(sortByAuthor);
+      setNewestStories(sorted);
+    }
 
-  else if(sorter === 2) {
-    const sorted = newestStories.sort(sortByTime);
-    setNewestStories(sorted);
-  }
+    else if (sorter === 2) {
+      setSortFilter(2)
+      const sorted = newestStories.sort(sortByTime);
+      setNewestStories(sorted);
+    }
 
-  else if(sorter === 3) {
-    const sorted = newestStories.sort(sortByScore);
-    setNewestStories(sorted);
-  }
+    else if (sorter === 3) {
+      setSortFilter(3)
+      const sorted = newestStories.sort(sortByScore);
+      setNewestStories(sorted);
+    }
   }
 
   useEffect(() => {
@@ -89,7 +100,13 @@ function StoriesList() {
         for (let i = 0, n = storyIds.length; i < n; i++) {
           const id = storyIds[i];
           const story = await get(child(itemRef, `${id}`))
-            .then(res => res.val())
+            .then(res => {
+              const data = res.val()
+              if(data !== null) {
+                return data;
+              }
+              }
+            )
             .catch(() => null);
           temp.push(story);
         }
@@ -125,7 +142,7 @@ function StoriesList() {
       <Container>
         <Box sx={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
           <Typography variant="h4" component="h1" sx={{ paddingY: 3 }}>Hacker News Newest Stories</Typography>
-          <Stack sx={{paddingY: 1}} spacing={2} direction="row">
+          <Stack sx={{ paddingY: 1 }} spacing={2} direction="row">
             <Button variant="outlined" onClick={() => handleSortChange(1)}>Author</Button>
             <Button variant="outlined" onClick={() => handleSortChange(2)}>Time</Button>
             <Button variant="outlined" onClick={() => handleSortChange(3)}>Score</Button>
